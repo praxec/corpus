@@ -1,11 +1,13 @@
 [package]
 name = "corpus"
 version = "0.0.1"
-edition = "2021"
-rust-version = "1.83"
+edition = "2024"
+rust-version = "1.85"
 license = "BSD-3-Clause"
 repository = "https://github.com/praxec/corpus"
 description = "A minimal docs-RAG MCP server: markdown-aware chunking, BM25 (tantivy) text search, optional rig-backed semantic search, content-hash incremental indexing."
+keywords = ["mcp", "rag", "search", "embeddings", "documentation"]
+categories = ["development-tools", "text-processing"]
 
 [[bin]]
 name = "corpus"

@@ -56,7 +56,10 @@ async fn text_index_and_search_end_to_end() {
         .unwrap();
     assert!(!hits.is_empty());
     assert_eq!(hits[0].path, "docs/config.md");
-    assert_eq!(hits[0].heading_path, vec!["Configuration", "Executor kinds"]);
+    assert_eq!(
+        hits[0].heading_path,
+        vec!["Configuration", "Executor kinds"]
+    );
     assert!(hits[0].snippet.contains("executor kinds"));
 }
 
@@ -81,14 +84,21 @@ async fn freshness_skips_unchanged_reindexes_changed_and_drops_deleted() {
     assert_eq!(r2.removed, 0);
 
     // Change only a.md: exactly one reindexed, one skipped.
-    write(repo.path(), "a.md", "# A\n\nalpha content about sprockets now\n");
+    write(
+        repo.path(),
+        "a.md",
+        "# A\n\nalpha content about sprockets now\n",
+    );
     let r3 = corpus.index(None).await.unwrap();
     assert_eq!(r3.indexed, 1);
     assert_eq!(r3.skipped_unchanged, 1);
     assert_eq!(r3.removed, 0);
 
     // The new content is searchable; the old content is gone.
-    let sprockets = corpus.search("sprockets", 5, SearchMode::Text).await.unwrap();
+    let sprockets = corpus
+        .search("sprockets", 5, SearchMode::Text)
+        .await
+        .unwrap();
     assert!(!sprockets.is_empty());
     let widgets = corpus.search("widgets", 5, SearchMode::Text).await.unwrap();
     assert!(widgets.is_empty(), "stale chunk should have been dropped");
@@ -151,7 +161,11 @@ async fn semantic_and_hybrid_search_via_stub_embedder() {
 async fn hybrid_falls_back_to_text_when_no_vectors() {
     let repo = tempfile::tempdir().unwrap();
     let data = tempfile::tempdir().unwrap();
-    write(repo.path(), "a.md", "# A\n\ncontent about telemetry pipelines\n");
+    write(
+        repo.path(),
+        "a.md",
+        "# A\n\ncontent about telemetry pipelines\n",
+    );
 
     // Index without an embedder (no vectors persisted).
     let corpus = text_corpus(repo.path(), data.path());

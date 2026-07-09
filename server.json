@@ -1,0 +1,15 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.praxec/corpus",
+  "description": "A minimal docs-RAG MCP server: markdown-aware chunking, BM25 (tantivy) text search, optional rig-backed semantic search, content-hash incremental indexing.",
+  "version": "0.0.1",
+  "repository": { "url": "https://github.com/praxec/corpus", "source": "github" },
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/praxec/corpus",
+      "version": "0.0.1",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}

@@ -20,6 +20,6 @@ pub mod search;
 pub mod server;
 pub mod store;
 
-pub use corpus::{build, Corpus, IndexReport};
+pub use corpus::{Corpus, IndexReport, build};
 pub use search::{SearchMode, SearchResult};
 pub use server::CorpusServer;
