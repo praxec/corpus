@@ -1,0 +1,49 @@
+[package]
+name = "corpus"
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.83"
+license = "BSD-3-Clause"
+repository = "https://github.com/praxec/corpus"
+description = "A minimal docs-RAG MCP server: markdown-aware chunking, BM25 (tantivy) text search, optional rig-backed semantic search, content-hash incremental indexing."
+
+[[bin]]
+name = "corpus"
+path = "src/main.rs"
+
+[lib]
+name = "corpus"
+path = "src/lib.rs"
+
+[dependencies]
+# MCP server surface — matched to praxec's pin (rmcp 1.7, stdio transport).
+rmcp = { version = "1.7", default-features = false, features = ["server", "transport-io"] }
+
+# Discovery + chunking.
+# `ignore` provides the gitignore-aware walker (it wraps walkdir) + globset.
+ignore = "0.4"
+globset = "0.4"
+pulldown-cmark = "0.13"
+
+# Freshness: content hashing.
+blake3 = "1"
+
+# Text search (always on).
+tantivy = "0.26"
+
+# Semantic search (opt-in) — the embedding engine, matched to praxec-embeddings
+# (rig-core 0.38; the crate's lib is `rig_core`, imported as `rig`).
+rig = { package = "rig-core", version = "0.38" }
+
+# Serde / runtime / errors.
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+async-trait = "0.1"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dirs = "5"
+
+[dev-dependencies]
+tempfile = "3"
