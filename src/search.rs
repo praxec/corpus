@@ -58,7 +58,10 @@ pub fn reciprocal_rank_fusion(lists: &[Vec<String>]) -> Vec<(String, f32)> {
             *scores.entry(id.clone()).or_insert(0.0) += 1.0 / (RRF_K + rank);
         }
     }
-    let mut fused: Vec<(String, f32)> = order.into_iter().map(|id| (id.clone(), scores[&id])).collect();
+    let mut fused: Vec<(String, f32)> = order
+        .into_iter()
+        .map(|id| (id.clone(), scores[&id]))
+        .collect();
     fused.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
     fused
 }

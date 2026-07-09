@@ -12,8 +12,8 @@ use crate::config::CorpusConfig;
 use crate::discovery::discover;
 use crate::embed::Embedder;
 use crate::index::TextIndex;
-use crate::manifest::{content_hash, Manifest};
-use crate::search::{reciprocal_rank_fusion, snippet, SearchMode, SearchResult};
+use crate::manifest::{Manifest, content_hash};
+use crate::search::{SearchMode, SearchResult, reciprocal_rank_fusion, snippet};
 use crate::store::{ChunkStore, VectorStore};
 
 /// Outcome of an `index` run — the incremental-update report.
@@ -71,7 +71,10 @@ impl Corpus {
     /// hash; changed/new files are re-chunked (and re-embedded if enabled);
     /// deleted files' chunks are dropped. All state (manifest, tantivy, chunk
     /// store, vector store) is reconciled against the current file set.
-    pub async fn index(&self, include_override: Option<Vec<String>>) -> anyhow::Result<IndexReport> {
+    pub async fn index(
+        &self,
+        include_override: Option<Vec<String>>,
+    ) -> anyhow::Result<IndexReport> {
         std::fs::create_dir_all(&self.data_dir)?;
         let include = include_override.unwrap_or_else(|| self.config.include.clone());
 
@@ -274,10 +277,7 @@ fn embed_input(chunk: &crate::chunk::Chunk) -> String {
 /// Convenience: build a [`Corpus`] for `repo`, resolving the data dir + config
 /// and constructing the embedder iff `embeddings` is enabled (config or the
 /// per-call override). Returns the corpus plus whether embeddings are active.
-pub fn build(
-    repo: &Path,
-    embeddings_override: Option<bool>,
-) -> anyhow::Result<Corpus> {
+pub fn build(repo: &Path, embeddings_override: Option<bool>) -> anyhow::Result<Corpus> {
     let data_dir = crate::config::resolve_data_dir(repo);
     let mut config = CorpusConfig::load(&data_dir);
     if let Some(on) = embeddings_override {

@@ -8,14 +8,14 @@
 use std::borrow::Cow;
 use std::sync::Arc;
 
+use rmcp::ErrorData as McpError;
+use rmcp::ServerHandler;
 use rmcp::model::{
     CallToolRequestParams, CallToolResult, Implementation, InitializeResult, JsonObject,
     ListToolsResult, PaginatedRequestParams, ProtocolVersion, ServerCapabilities, ServerInfo, Tool,
 };
 use rmcp::service::{RequestContext, RoleServer};
-use rmcp::ErrorData as McpError;
-use rmcp::ServerHandler;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 use crate::search::SearchMode;
 
@@ -63,11 +63,12 @@ impl CorpusServer {
                 None,
             ));
         }
-        let include: Option<Vec<String>> = args.get("include").and_then(|v| v.as_array()).map(|a| {
-            a.iter()
-                .filter_map(|x| x.as_str().map(String::from))
-                .collect()
-        });
+        let include: Option<Vec<String>> =
+            args.get("include").and_then(|v| v.as_array()).map(|a| {
+                a.iter()
+                    .filter_map(|x| x.as_str().map(String::from))
+                    .collect()
+            });
         let embeddings = args.get("embeddings").and_then(|v| v.as_bool());
 
         let corpus = crate::corpus::build(&repo, embeddings)

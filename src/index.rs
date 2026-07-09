@@ -10,8 +10,8 @@ use std::path::Path;
 use tantivy::collector::TopDocs;
 use tantivy::directory::MmapDirectory;
 use tantivy::query::QueryParser;
-use tantivy::schema::{Field, Schema, Value, STORED, STRING, TEXT};
-use tantivy::{doc, Index, IndexWriter, TantivyDocument, Term};
+use tantivy::schema::{Field, STORED, STRING, Schema, TEXT, Value};
+use tantivy::{Index, IndexWriter, TantivyDocument, Term, doc};
 
 use crate::chunk::Chunk;
 
@@ -146,7 +146,12 @@ mod tests {
         let mut w = idx.writer().unwrap();
         idx.add_chunk(
             &w,
-            &chunk("a#0", "a.md", &["Config"], "the executor kinds are llm and tool"),
+            &chunk(
+                "a#0",
+                "a.md",
+                &["Config"],
+                "the executor kinds are llm and tool",
+            ),
         )
         .unwrap();
         idx.add_chunk(
