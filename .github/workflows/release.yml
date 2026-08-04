@@ -39,6 +39,7 @@ jobs:
           bin: corpus
           target: ${{ matrix.target }}
           archive: corpus-${{ matrix.target }}
+          checksum: sha256
           token: ${{ secrets.GITHUB_TOKEN }}
 
   crates:
